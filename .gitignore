@@ -1,0 +1,24 @@
+# Quarkus
+auth-backend/target/
+auth-backend/.quarkus/
+auth-backend/*.class
+
+# Angular
+auth-frontend/node_modules/
+auth-frontend/dist/
+auth-frontend/.angular/
+
+# IntelliJ
+.idea/
+*.iml
+*.iws
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+.env

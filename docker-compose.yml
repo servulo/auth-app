@@ -1,0 +1,68 @@
+services:
+  postgresql:
+    image: postgres:16
+    container_name: auth-postgresql
+    environment:
+      POSTGRES_DB: sprj_auth
+      POSTGRES_USER: sprj
+      POSTGRES_PASSWORD: sprj
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sprj -d sprj_auth"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: auth-keycloak
+    command: start-dev --import-realm
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgresql:5432/sprj_auth
+      KC_DB_USERNAME: sprj
+      KC_DB_PASSWORD: sprj
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./auth-keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
+    depends_on:
+      postgresql:
+        condition: service_healthy
+
+  auth-backend:
+    build:
+      context: ./auth-backend
+      dockerfile: src/main/docker/Dockerfile.jvm
+    container_name: auth-backend
+    environment:
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://postgresql:5432/sprj_auth
+      QUARKUS_DATASOURCE_USERNAME: sprj
+      QUARKUS_DATASOURCE_PASSWORD: sprj
+      QUARKUS_OIDC_AUTH_SERVER_URL: http://keycloak:8080/realms/sprj
+      QUARKUS_OIDC_CLIENT_ID: auth-backend
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+
+  auth-frontend:
+    build:
+      context: ./auth-frontend
+      dockerfile: Dockerfile
+    container_name: auth-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - auth-backend
+
+volumes:
+  postgresql_data:
