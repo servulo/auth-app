@@ -1,0 +1,70 @@
+{
+  "realm": "sprj",
+  "enabled": true,
+  "displayName": "SPRJ",
+  "sslRequired": "external",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": true,
+  "permanentLockout": false,
+  "maxFailureWaitSeconds": 900,
+  "minimumQuickLoginWaitSeconds": 60,
+  "waitIncrementSeconds": 60,
+  "quickLoginCheckMilliSeconds": 1000,
+  "maxDeltaTimeSeconds": 43200,
+  "failureFactor": 5,
+  "accessTokenLifespan": 300,
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 36000,
+  "clients": [
+    {
+      "clientId": "auth-frontend",
+      "name": "Auth Frontend",
+      "description": "Portal de autenticação do ecossistema SPRJ",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "implicitFlowEnabled": false,
+      "serviceAccountsEnabled": false,
+      "protocol": "openid-connect",
+      "redirectUris": [
+        "http://localhost:4200/*",
+        "https://auth.seudominio.com/*"
+      ],
+      "webOrigins": [
+        "http://localhost:4200",
+        "https://auth.seudominio.com"
+      ],
+      "attributes": {
+        "post.logout.redirect.uris": "http://localhost:4200/*##https://auth.seudominio.com/*"
+      },
+      "defaultClientScopes": [
+        "web-origins",
+        "profile",
+        "roles",
+        "email"
+      ]
+    }
+  ],
+  "roles": {
+    "realm": [],
+    "client": {
+      "auth-frontend": [
+        {
+          "name": "super-admin",
+          "description": "Acesso total ao painel administrativo do Auth App"
+        }
+      ]
+    }
+  },
+  "scopeMappings": [],
+  "clientScopeMappings": {},
+  "smtpServer": {},
+  "internationalizationEnabled": false,
+  "supportedLocales": [],
+  "defaultLocale": "pt-BR"
+}
