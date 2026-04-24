@@ -6,6 +6,8 @@ import br.com.sprj.auth.dto.*;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.core.MultivaluedHashMap;
+import jakarta.ws.rs.core.MultivaluedMap;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.keycloak.admin.client.CreatedResponseUtil;
@@ -32,9 +34,12 @@ public class AuthService {
     String clientId;
 
     public LoginResponse login(LoginRequest request) {
-        TokenResponse token = tokenClient.token(
-                "password", clientId, request.username(), request.password(), null);
-        return toLoginResponse(token);
+        MultivaluedMap<String, String> form = new MultivaluedHashMap<>();
+        form.add("grant_type", "password");
+        form.add("client_id", clientId);
+        form.add("username", request.username());
+        form.add("password", request.password());
+        return toLoginResponse(tokenClient.token(form));
     }
 
     public void register(RegisterRequest request) {
@@ -61,19 +66,23 @@ public class AuthService {
     }
 
     public void logout(LogoutRequest request) {
-        tokenClient.logout(clientId, request.refreshToken());
+        MultivaluedMap<String, String> form = new MultivaluedHashMap<>();
+        form.add("client_id", clientId);
+        form.add("refresh_token", request.refreshToken());
+        tokenClient.logout(form);
     }
 
     public LoginResponse refresh(RefreshRequest request) {
-        TokenResponse token = tokenClient.token(
-                "refresh_token", clientId, null, null, request.refreshToken());
-        return toLoginResponse(token);
+        MultivaluedMap<String, String> form = new MultivaluedHashMap<>();
+        form.add("grant_type", "refresh_token");
+        form.add("client_id", clientId);
+        form.add("refresh_token", request.refreshToken());
+        return toLoginResponse(tokenClient.token(form));
     }
 
     public void forgotPassword(ForgotPasswordRequest request) {
         List<UserRepresentation> users = keycloak.realm(realm).users()
                 .searchByEmail(request.email(), true);
-        // Não revela se o e-mail existe ou não
         if (users.isEmpty()) return;
         keycloak.realm(realm).users().get(users.get(0).getId())
                 .executeActionsEmail(List.of("UPDATE_PASSWORD"));

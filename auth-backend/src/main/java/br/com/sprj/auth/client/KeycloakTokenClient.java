@@ -2,6 +2,7 @@ package br.com.sprj.auth.client;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MultivaluedMap;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 @RegisterRestClient(configKey = "keycloak-token")
@@ -12,18 +13,9 @@ public interface KeycloakTokenClient {
 
     @POST
     @Path("/token")
-    TokenResponse token(
-            @FormParam("grant_type") String grantType,
-            @FormParam("client_id") String clientId,
-            @FormParam("username") String username,
-            @FormParam("password") String password,
-            @FormParam("refresh_token") String refreshToken
-    );
+    TokenResponse token(MultivaluedMap<String, String> form);
 
     @POST
     @Path("/logout")
-    void logout(
-            @FormParam("client_id") String clientId,
-            @FormParam("refresh_token") String refreshToken
-    );
+    void logout(MultivaluedMap<String, String> form);
 }
