@@ -54,15 +54,16 @@ services:
       keycloak:
         condition: service_started
 
-  auth-frontend:
-    build:
-      context: ./auth-frontend
-      dockerfile: Dockerfile
-    container_name: auth-frontend
-    ports:
-      - "4200:80"
-    depends_on:
-      - auth-backend
+  # auth-frontend: descomentar após o scaffold do Angular
+  # auth-frontend:
+  #   build:
+  #     context: ./auth-frontend
+  #     dockerfile: Dockerfile
+  #   container_name: auth-frontend
+  #   ports:
+  #     - "4200:80"
+  #   depends_on:
+  #     - auth-backend
 
 volumes:
   postgresql_data:
