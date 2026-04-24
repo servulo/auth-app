@@ -2,8 +2,6 @@ package br.com.sprj.user.model;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -27,8 +25,8 @@ public class UserProfile extends PanacheEntityBase {
     @Column(name = "bio")
     public String bio;
 
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "preferences", columnDefinition = "jsonb")
+    @Convert(converter = MapToJsonConverter.class)
+    @Column(name = "preferences", columnDefinition = "text")
     public Map<String, Object> preferences;
 
     @Column(name = "created_at", nullable = false, updatable = false)

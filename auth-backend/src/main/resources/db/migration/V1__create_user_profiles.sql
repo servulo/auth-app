@@ -3,7 +3,7 @@ CREATE TABLE user_profiles (
     keycloak_id VARCHAR(36)  NOT NULL UNIQUE,
     avatar_url  VARCHAR(500),
     bio         TEXT,
-    preferences JSONB,
+    preferences TEXT,
     created_at  TIMESTAMP    NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP    NOT NULL DEFAULT NOW()
 );
