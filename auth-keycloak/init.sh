@@ -24,6 +24,22 @@ if [ -z "$TOKEN" ]; then
   exit 1
 fi
 
+echo "[init] Configurando SMTP (Mailpit)..."
+curl -sf -X PUT "${KEYCLOAK_URL}/admin/realms/${REALM}" \
+  -H "Authorization: Bearer ${TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "smtpServer": {
+      "host": "mailpit",
+      "port": "1025",
+      "from": "no-reply@sprj.local",
+      "fromDisplayName": "SPRJ Auth",
+      "ssl": "false",
+      "starttls": "false"
+    }
+  }'
+echo "[init] SMTP configurado."
+
 echo "[init] Criando usuario de teste..."
 STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
   -X POST "${KEYCLOAK_URL}/admin/realms/${REALM}/users" \

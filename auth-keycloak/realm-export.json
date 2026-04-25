@@ -91,7 +91,14 @@
   },
   "scopeMappings": [],
   "clientScopeMappings": {},
-  "smtpServer": {},
+  "smtpServer": {
+    "host": "mailpit",
+    "port": "1025",
+    "from": "no-reply@sprj.local",
+    "fromDisplayName": "SPRJ Auth",
+    "ssl": "false",
+    "starttls": "false"
+  },
   "internationalizationEnabled": false,
   "supportedLocales": [],
   "defaultLocale": "pt-BR"

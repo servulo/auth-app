@@ -19,6 +19,13 @@ services:
       retries: 15
       start_period: 30s
 
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: auth-mailpit
+    ports:
+      - "8025:8025"   # UI web
+      - "1025:1025"   # SMTP
+
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     container_name: auth-keycloak
@@ -46,6 +53,7 @@ services:
     entrypoint: ["sh", "/init.sh"]
     depends_on:
       - keycloak
+      - mailpit
     restart: "no"
 
   # auth-backend: em DEV, rodar separado com "quarkus dev" dentro de auth-backend/
