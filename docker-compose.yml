@@ -1,20 +1,23 @@
 services:
-  postgresql:
-    image: postgres:16
-    container_name: auth-postgresql
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: auth-sqlserver
     environment:
-      POSTGRES_DB: sprj_auth
-      POSTGRES_USER: sprj
-      POSTGRES_PASSWORD: sprj
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "SprjAuth@2025"
+      MSSQL_PID: "Express"
     ports:
-      - "5432:5432"
+      - "1433:1433"
     volumes:
-      - postgresql_data:/var/lib/postgresql/data
+      - sqlserver_data:/var/opt/mssql
+      - ./auth-sqlserver/init.sh:/init.sh
+    entrypoint: ["/bin/bash", "/init.sh"]
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U sprj -d sprj_auth"]
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'SprjAuth@2025' -d sprj_auth -Q 'SELECT 1' -No 2>/dev/null || exit 1"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 15
+      start_period: 30s
 
   keycloak:
     image: quay.io/keycloak/keycloak:latest
@@ -23,16 +26,16 @@ services:
     environment:
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
-      KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://postgresql:5432/sprj_auth
-      KC_DB_USERNAME: sprj
-      KC_DB_PASSWORD: sprj
+      KC_DB: mssql
+      KC_DB_URL: "jdbc:sqlserver://sqlserver:1433;databaseName=sprj_auth;encrypt=false"
+      KC_DB_USERNAME: sa
+      KC_DB_PASSWORD: "SprjAuth@2025"
     ports:
       - "8080:8080"
     volumes:
       - ./auth-keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
     depends_on:
-      postgresql:
+      sqlserver:
         condition: service_healthy
 
   keycloak-init:
@@ -78,4 +81,4 @@ services:
   #     - auth-backend
 
 volumes:
-  postgresql_data:
+  sqlserver_data:

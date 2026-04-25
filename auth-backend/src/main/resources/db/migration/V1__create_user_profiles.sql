@@ -1,9 +1,9 @@
 CREATE TABLE user_profiles (
-    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    keycloak_id VARCHAR(36)  NOT NULL UNIQUE,
+    id          UNIQUEIDENTIFIER  PRIMARY KEY DEFAULT NEWID(),
+    keycloak_id VARCHAR(36)       NOT NULL UNIQUE,
     avatar_url  VARCHAR(500),
-    bio         TEXT,
-    preferences TEXT,
-    created_at  TIMESTAMP    NOT NULL DEFAULT NOW(),
-    updated_at  TIMESTAMP    NOT NULL DEFAULT NOW()
+    bio         NVARCHAR(MAX),
+    preferences NVARCHAR(MAX),
+    created_at  DATETIME2         NOT NULL DEFAULT GETUTCDATE(),
+    updated_at  DATETIME2         NOT NULL DEFAULT GETUTCDATE()
 );

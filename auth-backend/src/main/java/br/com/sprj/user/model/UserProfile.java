@@ -26,7 +26,7 @@ public class UserProfile extends PanacheEntityBase {
     public String bio;
 
     @Convert(converter = MapToJsonConverter.class)
-    @Column(name = "preferences", columnDefinition = "text")
+    @Column(name = "preferences", columnDefinition = "NVARCHAR(MAX)")
     public Map<String, Object> preferences;
 
     @Column(name = "created_at", nullable = false, updatable = false)
