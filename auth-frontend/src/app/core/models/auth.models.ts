@@ -36,6 +36,9 @@ export interface TokenPayload {
   family_name: string;
   email_verified: boolean;
   exp: number;
+  realm_access?: {
+    roles: string[];
+  };
   resource_access?: {
     [clientId: string]: {
       roles: string[];

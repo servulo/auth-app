@@ -81,15 +81,13 @@
     }
   ],
   "roles": {
-    "realm": [],
-    "client": {
-      "auth-frontend": [
-        {
-          "name": "super-admin",
-          "description": "Acesso total ao painel administrativo do Auth App"
-        }
-      ]
-    }
+    "realm": [
+      {
+        "name": "super-admin",
+        "description": "Administrador do ecossistema SPRJ — acesso total ao Auth App"
+      }
+    ],
+    "client": {}
   },
   "scopeMappings": [],
   "clientScopeMappings": {},

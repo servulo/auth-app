@@ -39,7 +39,7 @@ export class AuthService {
 
   readonly isAdmin = computed(() => {
     const user = this.currentUser();
-    return user?.resource_access?.[CLIENT_ID]?.roles?.includes('super-admin') ?? false;
+    return user?.realm_access?.roles?.includes('super-admin') ?? false;
   });
 
   // ── Token storage ───────────────────────────────────────────────────────────
