@@ -35,6 +35,16 @@ services:
       postgresql:
         condition: service_healthy
 
+  keycloak-init:
+    image: curlimages/curl:latest
+    container_name: auth-keycloak-init
+    volumes:
+      - ./auth-keycloak/init.sh:/init.sh
+    entrypoint: ["sh", "/init.sh"]
+    depends_on:
+      - keycloak
+    restart: "no"
+
   # auth-backend: em DEV, rodar separado com "quarkus dev" dentro de auth-backend/
   # Em PROD, fazer build com "mvn package" antes do docker compose up
   # auth-backend:

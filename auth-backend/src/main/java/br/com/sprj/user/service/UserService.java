@@ -10,9 +10,15 @@ import jakarta.ws.rs.NotFoundException;
 @ApplicationScoped
 public class UserService {
 
+    @Transactional
     public UserProfileResponse getProfile(String keycloakId) {
         UserProfile profile = UserProfile.findByKeycloakId(keycloakId)
-                .orElseThrow(() -> new NotFoundException("Perfil não encontrado."));
+                .orElseGet(() -> {
+                    UserProfile newProfile = new UserProfile();
+                    newProfile.keycloakId = keycloakId;
+                    newProfile.persist();
+                    return newProfile;
+                });
         return UserProfileResponse.from(profile);
     }
 

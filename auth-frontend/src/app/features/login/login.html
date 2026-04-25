@@ -1,0 +1,98 @@
+<div class="min-h-screen grid lg:grid-cols-2">
+
+  <!-- Painel esquerdo — branding -->
+  <div class="hidden lg:flex flex-col justify-between bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 p-12 text-white">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-lg bg-blue-500 flex items-center justify-center">
+        <i class="pi pi-shield text-white text-lg"></i>
+      </div>
+      <span class="text-xl font-bold tracking-tight">SPRJ Auth</span>
+    </div>
+
+    <div>
+      <p class="text-4xl font-bold leading-tight mb-4">
+        Autenticação centralizada<br/>para o ecossistema SPRJ.
+      </p>
+      <p class="text-slate-400 text-lg">
+        Um login. Todas as aplicações.
+      </p>
+    </div>
+
+    <p class="text-slate-500 text-sm">© 2026 SPRJ. Todos os direitos reservados.</p>
+  </div>
+
+  <!-- Painel direito — formulário -->
+  <div class="flex items-center justify-center p-8 bg-slate-50">
+    <div class="w-full max-w-sm">
+
+      <!-- Logo mobile -->
+      <div class="flex items-center gap-2 mb-10 lg:hidden">
+        <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
+          <i class="pi pi-shield text-white"></i>
+        </div>
+        <span class="text-lg font-bold text-slate-800">SPRJ Auth</span>
+      </div>
+
+      <h1 class="text-2xl font-bold text-slate-900 mb-1">Bem-vindo de volta</h1>
+      <p class="text-slate-500 text-sm mb-8">Entre com suas credenciais para continuar.</p>
+
+      @if (error()) {
+        <div class="flex items-center gap-3 bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 mb-6 text-sm">
+          <i class="pi pi-exclamation-circle flex-shrink-0"></i>
+          <span>{{ error() }}</span>
+        </div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-5">
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-sm font-medium text-slate-700">Usuário</label>
+          <input
+            pInputText
+            formControlName="username"
+            placeholder="seu.usuario"
+            class="w-full"
+          />
+          @if (form.get('username')?.invalid && form.get('username')?.touched) {
+            <span class="text-xs text-red-500">Campo obrigatório</span>
+          }
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <div class="flex items-center justify-between">
+            <label class="text-sm font-medium text-slate-700">Senha</label>
+            <a routerLink="/recuperar-senha" class="text-xs text-blue-600 hover:text-blue-800 hover:underline">
+              Esqueceu a senha?
+            </a>
+          </div>
+          <p-password
+            formControlName="password"
+            placeholder="••••••••"
+            [feedback]="false"
+            [toggleMask]="true"
+            styleClass="w-full"
+            inputStyleClass="w-full"
+          />
+          @if (form.get('password')?.invalid && form.get('password')?.touched) {
+            <span class="text-xs text-red-500">Campo obrigatório</span>
+          }
+        </div>
+
+        <p-button
+          type="submit"
+          label="Entrar"
+          styleClass="w-full mt-1"
+          [loading]="loading()"
+        />
+
+      </form>
+
+      <p class="text-center text-sm text-slate-500 mt-6">
+        Não tem uma conta?
+        <a routerLink="/cadastro" class="text-blue-600 hover:text-blue-800 font-medium hover:underline">Cadastre-se</a>
+      </p>
+
+    </div>
+  </div>
+
+</div>

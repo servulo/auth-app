@@ -60,7 +60,12 @@ public class AuthService {
         try {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
-                throw new BadRequestException("Autenticação falhou: " + response.body());
+                throw new jakarta.ws.rs.WebApplicationException(
+                        jakarta.ws.rs.core.Response.status(response.statusCode())
+                                .entity(response.body())
+                                .type(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+                                .build()
+                );
             }
             return objectMapper.readValue(response.body(), TokenResponse.class);
         } catch (IOException | InterruptedException e) {
@@ -99,7 +104,8 @@ public class AuthService {
                 "grant_type", "password",
                 "client_id", clientId,
                 "username", request.username(),
-                "password", request.password()
+                "password", request.password(),
+                "scope", "openid profile email roles"
         )));
     }
 
@@ -137,7 +143,8 @@ public class AuthService {
         return toLoginResponse(callTokenEndpoint(Map.of(
                 "grant_type", "refresh_token",
                 "client_id", clientId,
-                "refresh_token", request.refreshToken()
+                "refresh_token", request.refreshToken(),
+                "scope", "openid profile email roles"
         )));
     }
 

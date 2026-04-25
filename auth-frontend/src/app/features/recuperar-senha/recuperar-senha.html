@@ -1,0 +1,94 @@
+<div class="min-h-screen grid lg:grid-cols-2">
+
+  <!-- Painel esquerdo — branding -->
+  <div class="hidden lg:flex flex-col justify-between bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 p-12 text-white">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-lg bg-blue-500 flex items-center justify-center">
+        <i class="pi pi-shield text-white text-lg"></i>
+      </div>
+      <span class="text-xl font-bold tracking-tight">SPRJ Auth</span>
+    </div>
+
+    <div>
+      <p class="text-4xl font-bold leading-tight mb-4">
+        Recupere o acesso<br/>à sua conta.
+      </p>
+      <p class="text-slate-400 text-lg">
+        Enviaremos as instruções para o seu e-mail.
+      </p>
+    </div>
+
+    <p class="text-slate-500 text-sm">© 2026 SPRJ. Todos os direitos reservados.</p>
+  </div>
+
+  <!-- Painel direito -->
+  <div class="flex items-center justify-center p-8 bg-slate-50">
+    <div class="w-full max-w-sm">
+
+      <div class="flex items-center gap-2 mb-10 lg:hidden">
+        <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
+          <i class="pi pi-shield text-white"></i>
+        </div>
+        <span class="text-lg font-bold text-slate-800">SPRJ Auth</span>
+      </div>
+
+      @if (sent()) {
+
+        <div class="text-center">
+          <div class="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-5">
+            <i class="pi pi-envelope text-green-600 text-2xl"></i>
+          </div>
+          <h1 class="text-2xl font-bold text-slate-900 mb-2">E-mail enviado!</h1>
+          <p class="text-slate-500 text-sm mb-8">
+            Se o e-mail informado estiver cadastrado, você receberá as instruções para redefinir sua senha em breve.
+          </p>
+          <a
+            routerLink="/login"
+            class="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 font-medium hover:underline"
+          >
+            <i class="pi pi-arrow-left text-xs"></i>
+            Voltar ao login
+          </a>
+        </div>
+
+      } @else {
+
+        <a routerLink="/login" class="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 mb-8">
+          <i class="pi pi-arrow-left text-xs"></i> Voltar ao login
+        </a>
+
+        <h1 class="text-2xl font-bold text-slate-900 mb-1">Recuperar senha</h1>
+        <p class="text-slate-500 text-sm mb-8">
+          Informe seu e-mail cadastrado e enviaremos o link de redefinição.
+        </p>
+
+        @if (error()) {
+          <div class="flex items-center gap-3 bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 mb-6 text-sm">
+            <i class="pi pi-exclamation-circle flex-shrink-0"></i>
+            <span>{{ error() }}</span>
+          </div>
+        }
+
+        <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-5">
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-medium text-slate-700">E-mail</label>
+            <input pInputText formControlName="email" type="email" placeholder="joao@email.com" class="w-full" />
+            @if (form.get('email')?.invalid && form.get('email')?.touched) {
+              <span class="text-xs text-red-500">E-mail inválido</span>
+            }
+          </div>
+
+          <p-button
+            type="submit"
+            label="Enviar instruções"
+            styleClass="w-full"
+            [loading]="loading()"
+          />
+        </form>
+
+      }
+
+    </div>
+  </div>
+
+</div>

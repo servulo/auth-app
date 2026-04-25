@@ -1,0 +1,132 @@
+<div class="min-h-screen bg-slate-100">
+
+  <!-- Topbar -->
+  <header class="bg-white border-b border-slate-200 px-6 py-4">
+    <div class="max-w-3xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
+          <i class="pi pi-shield text-white text-sm"></i>
+        </div>
+        <span class="font-bold text-slate-800">SPRJ Auth</span>
+      </div>
+      <div class="flex items-center gap-2">
+        @if (isAdmin()) {
+          <p-button
+            label="Admin"
+            icon="pi pi-cog"
+            severity="secondary"
+            size="small"
+            [outlined]="true"
+            routerLink="/admin"
+          />
+        }
+        <p-button
+          label="Sair"
+          icon="pi pi-sign-out"
+          severity="secondary"
+          size="small"
+          [outlined]="true"
+          (onClick)="logout()"
+        />
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-6 py-10">
+
+    @if (loading()) {
+      <div class="bg-white rounded-2xl shadow-sm p-8 mb-5 animate-pulse">
+        <div class="flex items-center gap-5">
+          <div class="w-20 h-20 rounded-full bg-slate-200"></div>
+          <div class="flex-1 space-y-3">
+            <div class="h-5 bg-slate-200 rounded w-48"></div>
+            <div class="h-4 bg-slate-200 rounded w-64"></div>
+            <div class="h-4 bg-slate-200 rounded w-32"></div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl shadow-sm p-8 animate-pulse space-y-4">
+        <div class="h-5 bg-slate-200 rounded w-32"></div>
+        <div class="h-10 bg-slate-200 rounded"></div>
+        <div class="h-24 bg-slate-200 rounded"></div>
+      </div>
+
+    } @else {
+
+      <!-- Card de identidade -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 mb-5">
+        <div class="flex items-center gap-5">
+          <div class="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white text-2xl font-bold flex-shrink-0">
+            {{ user()?.given_name?.[0] }}{{ user()?.family_name?.[0] }}
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-3 flex-wrap">
+              <h1 class="text-xl font-bold text-slate-900">{{ user()?.name }}</h1>
+              @if (isAdmin()) {
+                <span class="inline-flex items-center gap-1 bg-red-100 text-red-700 text-xs font-semibold px-2.5 py-1 rounded-full">
+                  <i class="pi pi-star-fill text-[10px]"></i> super-admin
+                </span>
+              }
+            </div>
+            <p class="text-slate-500 mt-0.5">{{ user()?.email }}</p>
+            <p class="text-slate-400 text-sm mt-0.5">&#64;{{ user()?.preferred_username }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card de edição -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-8">
+        <h2 class="text-base font-semibold text-slate-800 mb-6">Editar perfil</h2>
+
+        @if (success()) {
+          <div class="flex items-center gap-3 bg-green-50 border border-green-200 text-green-700 rounded-lg px-4 py-3 mb-6 text-sm">
+            <i class="pi pi-check-circle flex-shrink-0"></i>
+            <span>Perfil salvo com sucesso!</span>
+          </div>
+        }
+        @if (error()) {
+          <div class="flex items-center gap-3 bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 mb-6 text-sm">
+            <i class="pi pi-exclamation-circle flex-shrink-0"></i>
+            <span>{{ error() }}</span>
+          </div>
+        }
+
+        <form [formGroup]="form" (ngSubmit)="save()" class="flex flex-col gap-5">
+
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-medium text-slate-700">URL do avatar</label>
+            <input
+              pInputText
+              formControlName="avatarUrl"
+              placeholder="https://exemplo.com/foto.png"
+              class="w-full"
+            />
+            <span class="text-xs text-slate-400">Link para uma imagem de perfil pública.</span>
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-medium text-slate-700">Bio</label>
+            <textarea
+              pTextarea
+              formControlName="bio"
+              placeholder="Conte um pouco sobre você..."
+              rows="4"
+              class="w-full resize-none"
+            ></textarea>
+          </div>
+
+          <div class="flex justify-end">
+            <p-button
+              type="submit"
+              label="Salvar alterações"
+              icon="pi pi-check"
+              [loading]="saving()"
+            />
+          </div>
+
+        </form>
+      </div>
+
+    }
+  </main>
+</div>
