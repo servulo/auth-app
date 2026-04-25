@@ -7,6 +7,7 @@ import {
   Application, ApplicationRequest,
   Role, RoleRequest, UserRoleRequest
 } from '../models/admin.models';
+import { RegisterRequest } from '../models/auth.models';
 
 @Injectable({ providedIn: 'root' })
 export class AdminService {
@@ -14,6 +15,10 @@ export class AdminService {
   private base = `${environment.apiUrl}/v1/admin`;
 
   // ── Usuários ────────────────────────────────────────────────────────────────
+  createUser(request: RegisterRequest): Observable<void> {
+    return this.http.post<void>(`${environment.apiUrl}/v1/auth/register`, request);
+  }
+
   listUsers(): Observable<AdminUser[]> {
     return this.http.get<AdminUser[]>(`${this.base}/users`);
   }

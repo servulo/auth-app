@@ -2,6 +2,7 @@ package br.com.sprj.auth.resource;
 
 import br.com.sprj.auth.dto.*;
 import br.com.sprj.auth.service.AuthService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -28,7 +29,8 @@ public class AuthResource {
 
     @POST
     @Path("/register")
-    @Operation(summary = "Cadastrar novo usuário")
+    @RolesAllowed("super-admin")
+    @Operation(summary = "Cadastrar novo usuário (requer super-admin)")
     public Response register(@Valid RegisterRequest request) {
         authService.register(request);
         return Response.status(Response.Status.CREATED).build();

@@ -1,6 +1,89 @@
 <p-toast />
 <p-confirmDialog />
 
+<!-- Dialog: Novo Usuário -->
+<p-dialog
+  header="Novo Usuário"
+  [(visible)]="dialogVisible"
+  [modal]="true"
+  [style]="{ width: '480px' }"
+  [draggable]="false"
+>
+  <form [formGroup]="form" class="flex flex-col gap-4 pt-2">
+
+    <div class="grid grid-cols-2 gap-4">
+      <div class="flex flex-col gap-1.5">
+        <label class="text-sm font-medium text-slate-700">Nome</label>
+        <input pInputText formControlName="firstName" placeholder="João" class="w-full" />
+        @if (form.get('firstName')?.invalid && form.get('firstName')?.touched) {
+          <span class="text-xs text-red-500">Campo obrigatório</span>
+        }
+      </div>
+      <div class="flex flex-col gap-1.5">
+        <label class="text-sm font-medium text-slate-700">Sobrenome</label>
+        <input pInputText formControlName="lastName" placeholder="Silva" class="w-full" />
+        @if (form.get('lastName')?.invalid && form.get('lastName')?.touched) {
+          <span class="text-xs text-red-500">Campo obrigatório</span>
+        }
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+      <label class="text-sm font-medium text-slate-700">E-mail</label>
+      <input pInputText formControlName="email" placeholder="joao@exemplo.com" class="w-full" />
+      @if (form.get('email')?.invalid && form.get('email')?.touched) {
+        <span class="text-xs text-red-500">E-mail inválido</span>
+      }
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+      <label class="text-sm font-medium text-slate-700">Usuário</label>
+      <input pInputText formControlName="username" placeholder="joao.silva" class="w-full" />
+      @if (form.get('username')?.invalid && form.get('username')?.touched) {
+        <span class="text-xs text-red-500">Campo obrigatório</span>
+      }
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+      <label class="text-sm font-medium text-slate-700">Senha</label>
+      <p-password
+        formControlName="password"
+        placeholder="••••••••"
+        [feedback]="false"
+        [toggleMask]="true"
+        styleClass="w-full"
+        inputStyleClass="w-full"
+      />
+      @if (form.get('password')?.invalid && form.get('password')?.touched) {
+        <span class="text-xs text-red-500">Mínimo 6 caracteres</span>
+      }
+    </div>
+
+    @if (dialogError()) {
+      <div class="flex items-center gap-3 bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm">
+        <i class="pi pi-exclamation-circle flex-shrink-0"></i>
+        <span>{{ dialogError() }}</span>
+      </div>
+    }
+
+  </form>
+
+  <ng-template #footer>
+    <p-button
+      label="Cancelar"
+      severity="secondary"
+      [text]="true"
+      (onClick)="dialogVisible.set(false)"
+    />
+    <p-button
+      label="Criar usuário"
+      icon="pi pi-check"
+      [loading]="dialogLoading()"
+      (onClick)="createUser()"
+    />
+  </ng-template>
+</p-dialog>
+
 <div>
   <!-- Header -->
   <div class="flex items-start justify-between mb-8">
@@ -8,13 +91,20 @@
       <h1 class="text-2xl font-bold text-slate-900">Usuários</h1>
       <p class="text-slate-500 text-sm mt-1">Gerencie os usuários registrados no Keycloak</p>
     </div>
-    <p-button
-      icon="pi pi-refresh"
-      severity="secondary"
-      [outlined]="true"
-      (onClick)="loadUsers()"
-      pTooltip="Recarregar"
-    />
+    <div class="flex items-center gap-2">
+      <p-button
+        icon="pi pi-refresh"
+        severity="secondary"
+        [outlined]="true"
+        (onClick)="loadUsers()"
+        pTooltip="Recarregar"
+      />
+      <p-button
+        icon="pi pi-plus"
+        label="Novo Usuário"
+        (onClick)="openDialog()"
+      />
+    </div>
   </div>
 
   <!-- Tabela -->
