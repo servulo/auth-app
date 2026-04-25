@@ -31,7 +31,7 @@ docker compose up -d
 
 | Recurso | Nome | URL |
 |---|---|---|
-| Keycloak | `sprj-ca-auth-keycloak` | `id.seudominio.com` |
-| Backend | `sprj-ca-auth-backend` | `api-auth.seudominio.com` |
-| Frontend | `sprj-swa-auth-frontend` | `auth.seudominio.com` |
+| Keycloak | `sprj-ca-auth-keycloak` | `id.servulo.dev.br` |
+| Backend | `sprj-ca-auth-backend` | `api-auth.servulo.dev.br` |
+| Frontend | `sprj-swa-auth-frontend` | `auth.servulo.dev.br` |
 | Banco de dados | Azure SQL Database | free tier permanente |

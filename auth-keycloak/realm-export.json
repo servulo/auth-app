@@ -46,14 +46,14 @@
       "protocol": "openid-connect",
       "redirectUris": [
         "http://localhost:4200/*",
-        "https://auth.seudominio.com/*"
+        "https://auth.servulo.dev.br/*"
       ],
       "webOrigins": [
         "http://localhost:4200",
-        "https://auth.seudominio.com"
+        "https://auth.servulo.dev.br"
       ],
       "attributes": {
-        "post.logout.redirect.uris": "http://localhost:4200/*##https://auth.seudominio.com/*"
+        "post.logout.redirect.uris": "http://localhost:4200/*##https://auth.servulo.dev.br/*"
       },
       "defaultClientScopes": [
         "openid",
