@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api-auth.servulo.dev.br'
+  apiUrl: 'https://auth-api.servulo.dev.br'
 };
